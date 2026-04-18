@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SleekAuth - Login</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <div class="card" id="auth-card">
+            <h1 id="title">Welcome Back</h1>
+            <p class="subtitle" id="subtitle">Enter your credentials to access your account</p>
+            
+            <div id="message" class="message"></div>
+            
+            <form id="auth-form">
+                <div class="form-group">
+                    <label for="username">Username</label>
+                    <input type="text" id="username" placeholder="john_doe" required autocomplete="username">
+                </div>
+                <div class="form-group">
+                    <label for="password">Password</label>
+                    <input type="password" id="password" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+                <button type="submit" id="submit-btn">Sign In</button>
+            </form>
+            
+            <div class="switch-mode">
+                <span id="switch-text">Don't have an account?</span>
+                <a href="#" id="toggle-mode">Create Account</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const authForm = document.getElementById('auth-form');
+        const toggleMode = document.getElementById('toggle-mode');
+        const title = document.getElementById('title');
+        const subtitle = document.getElementById('subtitle');
+        const submitBtn = document.getElementById('submit-btn');
+        const switchText = document.getElementById('switch-text');
+        const messageDiv = document.getElementById('message');
+        
+        let isLogin = true;
+
+        toggleMode.addEventListener('click', (e) => {
+            e.preventDefault();
+            isLogin = !isLogin;
+            
+            title.innerText = isLogin ? 'Welcome Back' : 'Create Account';
+            subtitle.innerText = isLogin ? 'Enter your credentials to access your account' : 'Join us and start your journey today';
+            submitBtn.innerText = isLogin ? 'Sign In' : 'Sign Up';
+            switchText.innerText = isLogin ? "Don't have an account?" : 'Already have an account?';
+            toggleMode.innerText = isLogin ? 'Create Account' : 'Sign In';
+            messageDiv.style.display = 'none';
+        });
+
+        authForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+            const endpoint = isLogin ? '/api/login' : '/api/signup';
+            
+            submitBtn.disabled = true;
+            submitBtn.innerText = isLogin ? 'Signing In...' : 'Creating...';
+            
+            try {
+                // Fetch CSRF token first
+                const csrfRes = await fetch('/api/csrf-token');
+                const { csrfToken } = await csrfRes.json();
+
+                const response = await fetch(endpoint, {
+                    method: 'POST',
+                    headers: { 
+                        'Content-Type': 'application/json',
+                        'X-CSRF-Token': csrfToken
+                    },
+                    body: JSON.stringify({ username, password })
+                });
+                
+                const data = await response.json();
+                
+                if (response.ok) {
+                    if (isLogin) {
+                        window.location.href = '/dashboard';
+                    } else {
+                        messageDiv.className = 'message success';
+                        messageDiv.innerText = 'Account created! You can now sign in.';
+                        isLogin = true;
+                        toggleMode.click(); // Switch to login mode
+                    }
+                } else {
+                    messageDiv.className = 'message error';
+                    messageDiv.innerText = data.error || 'Something went wrong';
+                }
+            } catch (err) {
+                messageDiv.className = 'message error';
+                messageDiv.innerText = 'Connection error. Is the server running?';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerText = isLogin ? 'Sign In' : 'Sign Up';
+            }
+        });
+        
+        // Check if already logged in
+        async function checkSession() {
+            try {
+                const res = await fetch('/api/me');
+                if (res.ok) window.location.href = '/dashboard';
+            } catch (e) {}
+        }
+        checkSession();
+    </script>
+</body>
+</html>

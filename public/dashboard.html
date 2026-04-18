@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - SleekAuth</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container dashboard-container">
+        <div class="header">
+            <h1>SleekAuth</h1>
+            <button id="logout-btn" class="logout-btn">Log Out</button>
+        </div>
+        
+        <div class="card welcome-card">
+            <h2>Welcome, <span id="display-username" class="username-tag">User</span>!</h2>
+            <p class="subtitle" style="margin-top: 10px;">You have successfully logged into your secure dashboard.</p>
+            
+            <div style="margin-top: 40px; padding: 20px; border: 1px dashed rgba(255,255,255,0.1); border-radius: 12px; font-size: 14px; color: var(--text-secondary);">
+                This is a protected area. Your session is active and your data is stored securely in SQLite.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const logoutBtn = document.getElementById('logout-btn');
+        const displayUsername = document.getElementById('display-username');
+
+        async function fetchUser() {
+            try {
+                const response = await fetch('/api/me');
+                if (!response.ok) {
+                    window.location.href = '/';
+                    return;
+                }
+                const data = await response.json();
+                displayUsername.innerText = data.user.username;
+            } catch (err) {
+                window.location.href = '/';
+            }
+        }
+
+        logoutBtn.addEventListener('click', async () => {
+            try {
+                const csrfRes = await fetch('/api/csrf-token');
+                const { csrfToken } = await csrfRes.json();
+                
+                await fetch('/api/logout', { 
+                    method: 'POST',
+                    headers: { 'X-CSRF-Token': csrfToken }
+                });
+                window.location.href = '/';
+            } catch (err) {
+                console.error('Logout failed', err);
+                window.location.href = '/';
+            }
+        });
+
+        fetchUser();
+    </script>
+</body>
+</html>

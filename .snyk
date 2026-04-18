@@ -1,0 +1,5 @@
+# Snyk policy file
+# https://docs.snyk.io/features/snyk-cli/policy-file
+exclude:
+  node_modules: true
+  public: false

@@ -1,0 +1,217 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+
+:root {
+    --bg-color: #0c0d12;
+    --card-bg: rgba(23, 25, 35, 0.8);
+    --accent-color: #6366f1;
+    --accent-glow: rgba(99, 102, 241, 0.4);
+    --text-primary: #f8fafc;
+    --text-secondary: #94a3b8;
+    --input-bg: rgba(30, 41, 59, 0.5);
+    --success: #10b981;
+    --danger: #ef4444;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Inter', sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    background-image: 
+        radial-gradient(at 0% 0%, hsla(253,16%,7%,1) 0, transparent 50%), 
+        radial-gradient(at 50% 0%, hsla(225,39%,30%,0.2) 0, transparent 50%),
+        radial-gradient(at 100% 0%, hsla(339,49%,30%,0.1) 0, transparent 50%);
+    color: var(--text-primary);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow-x: hidden;
+}
+
+.container {
+    width: 100%;
+    max-width: 420px;
+    padding: 20px;
+}
+
+.card {
+    background: var(--card-bg);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 24px;
+    padding: 40px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    position: relative;
+    overflow: hidden;
+    animation: fadeIn 0.6s ease-out;
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 4px;
+    background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin-bottom: 8px;
+    text-align: center;
+    background: linear-gradient(135deg, #fff 0%, #a5b4fc 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+p.subtitle {
+    color: var(--text-secondary);
+    text-align: center;
+    margin-bottom: 32px;
+    font-size: 14px;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    margin-bottom: 8px;
+    color: var(--text-secondary);
+    transition: color 0.3s;
+}
+
+input {
+    width: 100%;
+    background: var(--input-bg);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: #fff;
+    font-size: 15px;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+input:focus {
+    outline: none;
+    border-color: var(--accent-color);
+    box-shadow: 0 0 0 4px var(--accent-glow);
+    background: rgba(30, 41, 59, 0.8);
+}
+
+button {
+    width: 100%;
+    background: var(--accent-color);
+    color: white;
+    border: none;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 10px;
+    position: relative;
+    overflow: hidden;
+}
+
+button:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 15px -3px var(--accent-glow);
+    filter: brightness(1.1);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+.switch-mode {
+    text-align: center;
+    margin-top: 24px;
+    font-size: 14px;
+    color: var(--text-secondary);
+}
+
+.switch-mode a {
+    color: var(--accent-color);
+    text-decoration: none;
+    font-weight: 600;
+}
+
+.switch-mode a:hover {
+    text-decoration: underline;
+}
+
+.message {
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    display: none;
+    text-align: center;
+}
+
+.message.error {
+    display: block;
+    background: rgba(239, 68, 68, 0.1);
+    color: var(--danger);
+    border: 1px solid rgba(239, 68, 68, 0.2);
+}
+
+.message.success {
+    display: block;
+    background: rgba(16, 185, 129, 0.1);
+    color: var(--success);
+    border: 1px solid rgba(16, 185, 129, 0.2);
+}
+
+/* Dashboard Styles */
+.dashboard-container {
+    max-width: 800px;
+    width: 100%;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 40px;
+}
+
+.logout-btn {
+    width: auto;
+    padding: 8px 16px;
+    font-size: 14px;
+    background: rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.logout-btn:hover {
+    background: var(--danger);
+}
+
+.welcome-card {
+    padding: 60px;
+    text-align: center;
+}
+
+.username-tag {
+    color: var(--accent-color);
+    font-weight: 700;
+}

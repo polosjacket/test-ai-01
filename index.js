@@ -20,8 +20,8 @@ const csrfProtection = csrf({ cookie: true });
 
 // Rate limiting for auth routes
 const authLimiter = rateLimit({
-    windowMs: 15 * 60 * 1000, // 15 minutes
-    max: 10, // limit each IP to 10 requests per windowMs
+    windowMs: (process.env.RATE_LIMIT_WINDOW_MIN || 15) * 60 * 1000,
+    max: parseInt(process.env.RATE_LIMIT_MAX) || 100,
     message: { error: 'Too many requests, please try again later.' },
     standardHeaders: true,
     legacyHeaders: false,
@@ -126,5 +126,6 @@ app.get('/dashboard', authLimiter, (req, res) => {
 });
 
 app.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`);
+    const host = process.env.HOST || 'localhost';
+    console.log(`Server running at http://${host}:${PORT}`);
 });

@@ -46,7 +46,23 @@ This application has been meticulously hardened against common threats:
    PORT=3000
    SESSION_SECRET=your-very-secure-secret-here
    NODE_ENV=development
+   RATE_LIMIT_WINDOW_MIN=15
+   RATE_LIMIT_MAX=100
+   HOST=localhost
    ```
+
+### Configuration
+
+The application can be configured using environment variables in a `.env` file. Below are the available parameters:
+
+| Parameter | Default | Description |
+| :--- | :--- | :--- |
+| `PORT` | `3000` | The port number on which the server will run. |
+| `HOST` | `localhost` | The hostname or IP address of the server. |
+| `SESSION_SECRET` | `unset` | A secret string used to sign session cookies. **Must be set for security.** |
+| `NODE_ENV` | `development` | The application environment (`development` or `production`). |
+| `RATE_LIMIT_WINDOW_MIN` | `15` | The period (in minutes) for calculating rate limits. |
+| `RATE_LIMIT_MAX` | `100` | The maximum number of requests allowed within the specified time window. |
 
 ### Running the Application
 

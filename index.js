@@ -118,7 +118,7 @@ app.post('/api/logout', csrfProtection, (req, res) => {
 });
 
 // Serve frontend pages
-app.get('/dashboard', (req, res) => {
+app.get('/dashboard', authLimiter, (req, res) => {
     if (!req.session.user) {
         return res.redirect('/');
     }
